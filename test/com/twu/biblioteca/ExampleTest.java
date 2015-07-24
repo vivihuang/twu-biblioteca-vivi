@@ -4,33 +4,34 @@ import com.twu.biblioteca.entity.*;
 import com.twu.biblioteca.service.*;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class ExampleTest {
 
-    private BibliotecaApp bibliotecaApp = new BibliotecaApp();
     private UserInputMessage userInputMessage = new UserInputMessage();
     private SystemReplyMessageService systemReplyMessageService = new SystemReplyMessageService();
     private SystemReplyMessage systemReplyMessage = new SystemReplyMessage();
     private BookDetailsService bookDetailsService = new BookDetailsService();
     private List<BookDetails> allBookDetailsList = bookDetailsService.addBooksToList();
+    private ExchangeMessage exchangeMessage = new ExchangeMessage();
 
     @Test
     public void showWelcomeMessageTest(){
         String expectedMessage = systemReplyMessage.getWelcomeMessage();
-        String inputMessage = userInputMessage.getEnterSystemMessage();
-        String actualMessage = systemReplyMessageService.showWelcomeMessage(inputMessage);
+//        String inputMessage = userInputMessage.getEnterSystemMessage();
+        exchangeMessage = systemReplyMessageService.showWelcomeMessage();
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 
     @Test
     public void showQuitMessageTest() {
         String expectedMessage = systemReplyMessage.getQuitMessage();
-        String inputMessage = userInputMessage.getQuitMessage();
-        String actualMessage = systemReplyMessageService.showQuitMessage(inputMessage);
+//        String inputMessage = userInputMessage.getQuitMessage();
+        exchangeMessage = systemReplyMessageService.showQuitMessage();
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 
@@ -54,14 +55,16 @@ public class ExampleTest {
     @Test
     public void showMainMenuTest() {
         String expectedMessage = systemReplyMessage.getMenuOptions();
-        String actualMessage = systemReplyMessageService.showMenuOptions(userInputMessage.getMainMenuMessage());
+        exchangeMessage = systemReplyMessageService.showMenuOptions();
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 
     @Test
     public void showBookListTest(){
-        String expectedMessage = "1. The Little Prince\n2. Flipped\n3. And then there were none\n";
-        String actualMessage = systemReplyMessageService.showBookList(userInputMessage.getBookListMessage(),allBookDetailsList);
+        String expectedMessage = "The book list:\n1. The Little Prince\n2. Flipped\n3. And then there were none\n";
+        exchangeMessage = systemReplyMessageService.showBookList(allBookDetailsList);
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 
@@ -70,8 +73,9 @@ public class ExampleTest {
         String expectedMessage = "1. Book: The Little Prince; Author: Antoine de Saint-Exupéry; Published Year: 1942\n"+
                 "2. Book: Flipped; Author: Van Draanen Wendelin; Published Year: 2003\n"+
                 "3. Book: And then there were none; Author: Agatha Christie; Published Year: 2003\n";
-        String inputMessage = userInputMessage.getBookDetailMessage();
-        String actualMessage = systemReplyMessageService.showBookDetails(inputMessage, allBookDetailsList);
+//        String inputMessage = userInputMessage.getBookDetailMessage();
+        exchangeMessage = systemReplyMessageService.showBookDetails(allBookDetailsList);
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 
@@ -79,9 +83,9 @@ public class ExampleTest {
     public void validCheckoutBookTest(){
         String expectedMessage = systemReplyMessage.getSuccessfulCheckoutMessage();
         String inputMessage = userInputMessage.getCheckoutBookMessage()+1;
-        List<Object> objectList = systemReplyMessageService.checkoutBook(inputMessage, allBookDetailsList);
-        String actualMessage = (String)objectList.get(0);
-        List<BookDetails> actualBookDetailsList = (List<BookDetails>)objectList.get(1);
+        exchangeMessage = systemReplyMessageService.checkoutBook(inputMessage,allBookDetailsList);
+        String actualMessage = exchangeMessage.getOutputMessage();
+        List<BookDetails> actualBookDetailsList = exchangeMessage.getBookDetailsList();
         assertEquals(expectedMessage,actualMessage);
         assertEquals(2, actualBookDetailsList.size());
     }
@@ -90,28 +94,27 @@ public class ExampleTest {
     public void invalidCheckoutBookTest() {
         String inputMessage = userInputMessage.getCheckoutBookMessage()+"124";
         String expectedMessage = systemReplyMessage.getInvalidCheckoutMessage();
-        List<Object> objectList = systemReplyMessageService.checkoutBook(inputMessage, allBookDetailsList);
-        String actualMessage = (String)objectList.get(0);
+        exchangeMessage = systemReplyMessageService.checkoutBook(inputMessage,allBookDetailsList);
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 
     @Test
     public void validReturnBookTest(){
         String checkoutMessage = userInputMessage.getCheckoutBookMessage()+1;
-        List<Object> checkoutObjectList = systemReplyMessageService.checkoutBook(checkoutMessage,allBookDetailsList);
-        List<BookDetails> checkoutBookDetailsList = (List<BookDetails>)checkoutObjectList.get(1);
-        String returnMessage = userInputMessage.getReturnBookMessage()+1;
-        List<Object> returnObjectList = systemReplyMessageService.returnBook(returnMessage, checkoutBookDetailsList);
-        List<BookDetails> returnBookDetailsList = (List<BookDetails>)returnObjectList.get(1);
+        List<BookDetails> checkoutBookDetailsList = systemReplyMessageService.checkoutBook(checkoutMessage,allBookDetailsList).getBookDetailsList();
+        String inputMessage = userInputMessage.getReturnBookMessage()+1;
+        exchangeMessage = systemReplyMessageService.returnBook(inputMessage,checkoutBookDetailsList);
+        List<BookDetails> returnBookDetailsList = exchangeMessage.getBookDetailsList();
         assertEquals(allBookDetailsList,returnBookDetailsList);
     }
 
     @Test
     public void invalidReturnBookTest(){
         String expectedMessage = systemReplyMessage.getInvalidReturnMessage();
-        String returnMessage = userInputMessage.getReturnBookMessage()+"a";
-        List<Object> checkoutObjectList = systemReplyMessageService.returnBook(returnMessage,allBookDetailsList);
-        String actualMessage = (String)checkoutObjectList.get(0);
+        String inputMessage = userInputMessage.getReturnBookMessage()+"a";
+        exchangeMessage = systemReplyMessageService.returnBook(inputMessage, allBookDetailsList);
+        String actualMessage = exchangeMessage.getOutputMessage();
         assertEquals(expectedMessage,actualMessage);
     }
 }

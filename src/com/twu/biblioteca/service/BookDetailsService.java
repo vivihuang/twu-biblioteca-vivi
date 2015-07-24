@@ -1,6 +1,5 @@
 package com.twu.biblioteca.service;
 
-import com.sun.tools.corba.se.idl.StringGen;
 import com.twu.biblioteca.entity.BookDetails;
 import com.twu.biblioteca.entity.UserInputMessage;
 
@@ -12,7 +11,6 @@ import java.util.List;
  */
 public class BookDetailsService {
     private BookDetails bookDetails;
-    private UserInputMessage userInputMessage = new UserInputMessage();
 
     public List<BookDetails> addBooksToList(){
         List<BookDetails> bookDetailsList = new ArrayList<BookDetails>();
@@ -80,9 +78,9 @@ public class BookDetailsService {
         return null;
     }
 
-    public List<BookDetails> returnBook(String inputMessage,String orderMesage,List<BookDetails> bookDetailsList) {
+    public List<BookDetails> returnBook(String inputMessage,String orderMessage,List<BookDetails> bookDetailsList) {
         List<BookDetails> allBookDetailsList = addBooksToList();
-        String bookIndex = getBookIndex(inputMessage, orderMesage, allBookDetailsList);
+        String bookIndex = getBookIndex(inputMessage, orderMessage, allBookDetailsList);
         if (bookIndex != null && !checkReturnBookOnShelf(bookIndex,bookDetailsList)) {
             bookDetails = getBookDetailsById(bookIndex,allBookDetailsList);
             bookDetailsList.add(bookDetails);

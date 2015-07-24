@@ -5,7 +5,8 @@ public class SystemReplyMessage {
     private String welcomeMessage = "Welcome to the Bangalore public library management system!";
     private String invalidMenuMessage = "Select a valid option!";
     private String quitMessage = "Quit the system successful!";
-    private String menuOptions = "List Books.";
+    private String menuOptions = "List books.";
+    private String bookListMessage = "The book list:\n";
     private String successfulCheckoutMessage = "Thank you! Enjoy the book!";
     private String invalidCheckoutMessage = "That book is not available.";
     private String successfulReturnMessage = "Thank you for returning the book.";
@@ -41,5 +42,10 @@ public class SystemReplyMessage {
 
     public String getInvalidReturnMessage() {
         return invalidReturnMessage;
+    }
+
+
+    public String getBookListMessage() {
+        return bookListMessage;
     }
 }

@@ -2,7 +2,6 @@ package com.twu.biblioteca.service;
 
 import com.twu.biblioteca.entity.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,85 +10,131 @@ public class SystemReplyMessageService {
     private SystemReplyMessage systemReplyMessage = new SystemReplyMessage();
     private UserInputMessage userInputMessage = new UserInputMessage();
     private BookDetailsService bookDetailsService = new BookDetailsService();
+    private ExchangeMessage outputExchangeMessage = new ExchangeMessage();
 
     public String waitForInputMessage(Scanner scanner) {
         String message = scanner.nextLine();
         return message;
     }
 
+    public boolean getQuitMessage(String message) {
+        if (message.equals(userInputMessage.getQuitMessage())) {
+            return true;
+        }
+        return false;
+    }
+
     public void printOutMessage(String message) {
         System.out.println(message);
     }
 
+    public ExchangeMessage identifyMessage(String inputMessage,List<BookDetails> bookDetailsList) {
 
-    public String showWelcomeMessage(String inputMessage) {
-        if (inputMessage.equals(userInputMessage.getEnterSystemMessage())) {
-            return systemReplyMessage.getWelcomeMessage();
+        if (inputMessage.contains(userInputMessage.getEnterSystemMessage())) {
+            outputExchangeMessage = showWelcomeMessage();
         }
-        return null;
+        else if (inputMessage.contains(userInputMessage.getMenuMessage())) {
+            outputExchangeMessage = showMenuOptions();
+        }
+        else if (inputMessage.contains(userInputMessage.getBookListMessage())) {
+            outputExchangeMessage = showBookList(bookDetailsList);
+        }
+        else if (inputMessage.contains(userInputMessage.getBookDetailMessage())) {
+            outputExchangeMessage = showBookDetails(bookDetailsList);
+        }
+        else if (inputMessage.contains(userInputMessage.getCheckoutBookMessage())) {
+            outputExchangeMessage = checkoutBook(inputMessage,bookDetailsList);
+        }
+        else if (inputMessage.contains(userInputMessage.getReturnBookMessage())) {
+            outputExchangeMessage = returnBook(inputMessage, bookDetailsList);
+        }
+        else if (inputMessage.contains(userInputMessage.getQuitMessage())) {
+            outputExchangeMessage = showQuitMessage();
+        }
+        else {
+            outputExchangeMessage = invalidInput();
+        }
+        return outputExchangeMessage;
     }
 
-    public String showQuitMessage(String inputMessage) {
-        if (inputMessage.equals(userInputMessage.getQuitMessage())) {
-            return systemReplyMessage.getQuitMessage();
-        }
-        return null;
+    public ExchangeMessage invalidInput() {
+        String returnMessage = "Invalid input! Please retry!";
+        ExchangeMessage exchangeMessage = new ExchangeMessage(returnMessage);
+        return exchangeMessage;
     }
 
-    public String showMenuOptions(String inputMessage) {
-        if (inputMessage.equals(userInputMessage.getMainMenuMessage())) {
-            return systemReplyMessage.getMenuOptions();
-        }
-        return null;
+    public ExchangeMessage showWelcomeMessage() {
+//        if (inputMessage.equals(userInputMessage.getEnterSystemMessage())) {
+            ExchangeMessage exchangeMessage = new ExchangeMessage(systemReplyMessage.getWelcomeMessage());
+            return exchangeMessage;
+//        }
+//        return null;
     }
 
-    public String showBookList(String inputMessage,List<BookDetails> bookDetailsList){
-        if (inputMessage.equals(userInputMessage.getBookListMessage())) {
-            return bookDetailsService.getBookList(bookDetailsList);
-        }
-        return null;
+    public ExchangeMessage showQuitMessage() {
+//        if (inputMessage.equals(userInputMessage.getQuitMessage())) {
+            ExchangeMessage exchangeMessage = new ExchangeMessage(systemReplyMessage.getQuitMessage());
+            return exchangeMessage;
+//        }
+//        return null;
     }
 
-    public String showBookDetails(String inputMessage,List<BookDetails> bookDetailsList) {
-        String orderMessage = userInputMessage.getBookDetailMessage();
-        if (inputMessage.contains(orderMessage)) {
-            return bookDetailsService.getBookDetails(bookDetailsList);
-        }
-        return null;
+    public ExchangeMessage showMenuOptions() {
+//        if (inputMessage.equals(userInputMessage.getMenuMessage())) {
+            ExchangeMessage exchangeMessage = new ExchangeMessage(systemReplyMessage.getMenuOptions());
+            return exchangeMessage;
+//        }
+//        return null;
     }
 
-    public List<Object> checkoutBook (String inputMessage,List<BookDetails> bookDetailsList) {
-        List<Object> objectList = new ArrayList<Object>();
+    public ExchangeMessage showBookList(List<BookDetails> bookDetailsList) {
+//        if (inputMessage.equals(userInputMessage.getBookListMessage())) {
+            String outputMessage = systemReplyMessage.getBookListMessage() + bookDetailsService.getBookList(bookDetailsList);
+            ExchangeMessage exchangeMessage = new ExchangeMessage(outputMessage);
+            return exchangeMessage;
+//        }
+//        return null;
+    }
+
+    public ExchangeMessage showBookDetails(List<BookDetails> bookDetailsList) {
+//        String orderMessage = userInputMessage.getBookDetailMessage();
+//        if (inputMessage.contains(orderMessage)) {
+            ExchangeMessage exchangeMessage = new ExchangeMessage(bookDetailsService.getBookDetails(bookDetailsList));
+            return exchangeMessage;
+//        }
+//        return null;
+    }
+
+    public ExchangeMessage checkoutBook(String inputMessage, List<BookDetails> bookDetailsList) {
         String orderMessage = userInputMessage.getCheckoutBookMessage();
-        if (inputMessage.contains(orderMessage)) {
-            bookDetailsList = bookDetailsService.checkoutBook(inputMessage,orderMessage,bookDetailsList);
+        ExchangeMessage exchangeMessage = new ExchangeMessage();
+//        if (inputMessage.contains(orderMessage)) {
+            bookDetailsList = bookDetailsService.checkoutBook(inputMessage, orderMessage, bookDetailsList);
             if (bookDetailsList != null) {
-                objectList.add(systemReplyMessage.getSuccessfulCheckoutMessage());
-                objectList.add(bookDetailsList);
+                exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulCheckoutMessage());
+                exchangeMessage.setBookDetailsList(bookDetailsList);
+            } else {
+                exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidCheckoutMessage());
             }
-            else {
-                objectList.add(systemReplyMessage.getInvalidCheckoutMessage());
-            }
-            return objectList;
-        }
-        return null;
+            return exchangeMessage;
+//        }
+//        return null;
     }
 
-    public List<Object> returnBook(String inputMessage,List<BookDetails> bookDetailsList) {
-        List<Object> objectList = new ArrayList<Object>();
+    public ExchangeMessage returnBook(String inputMessage, List<BookDetails> bookDetailsList) {
+        ExchangeMessage exchangeMessage = new ExchangeMessage();
         String orderMessage = userInputMessage.getReturnBookMessage();
-        if (inputMessage.contains(orderMessage)) {
-            bookDetailsList = bookDetailsService.returnBook(inputMessage,orderMessage,bookDetailsList);
-            if (bookDetailsList!=null) {
-                objectList.add(systemReplyMessage.getQuitMessage());
-                objectList.add(bookDetailsList);
+//        if (inputMessage.contains(orderMessage)) {
+            bookDetailsList = bookDetailsService.returnBook(inputMessage, orderMessage, bookDetailsList);
+            if (bookDetailsList != null) {
+                exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulReturnMessage());
+                exchangeMessage.setBookDetailsList(bookDetailsList);
+            } else {
+                exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidReturnMessage());
             }
-            else {
-                objectList.add(systemReplyMessage.getInvalidReturnMessage());
-            }
-            return objectList;
-        }
-        return null;
+            return exchangeMessage;
+//        }
+//        return null;
     }
 
 }

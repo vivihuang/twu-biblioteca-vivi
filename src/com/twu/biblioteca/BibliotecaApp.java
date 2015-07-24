@@ -3,26 +3,28 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.entity.*;
 import com.twu.biblioteca.service.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
 
-    private static SystemReplyMessage systemReplyMessage = new SystemReplyMessage();
-    private static UserInputMessage userInputMessage = new UserInputMessage();
     private static BookDetailsService bookDetailsService = new BookDetailsService();
-    private static List<BookDetails> bookDetailsList = new ArrayList<BookDetails>();
+    private static SystemReplyMessageService systemReplyMessageService = new SystemReplyMessageService();
+    private static ExchangeMessage outputEchangeMessage = new ExchangeMessage();
 
     public static void main(String[] args) {
-        bookDetailsList = bookDetailsService.addBooksToList();
+        List<BookDetails> bookDetailsList = bookDetailsService.addBooksToList();
         Scanner scanner = new Scanner(System.in);
-        String message;
+        String inputMessage;
 
-
-//        do {
-//            message = waitForInputMessage(scanner);
-//
-//        } while ();
+        do {
+            inputMessage = systemReplyMessageService.waitForInputMessage(scanner);
+            outputEchangeMessage = systemReplyMessageService.identifyMessage(inputMessage,bookDetailsList);
+            if (outputEchangeMessage.getBookDetailsList() !=null) {
+                bookDetailsList = outputEchangeMessage.getBookDetailsList();
+            }
+            String outputMessage = outputEchangeMessage.getOutputMessage();
+            systemReplyMessageService.printOutMessage(outputMessage);
+        } while (!systemReplyMessageService.getQuitMessage(inputMessage));
     }
 }

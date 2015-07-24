@@ -3,9 +3,9 @@ package com.twu.biblioteca.entity;
 public class UserInputMessage {
     private String enterSystemMessage = "hi";
     private String quitMessage = "quit";
-    private String bookListMessage = "List Books";
+    private String bookListMessage = "list";
     private String bookDetailMessage = "details";
-    private String mainMenuMessage = "main menu";
+    private String mainMenuMessage = "menu";
     private String checkoutBookMessage = "checkout";
     private String returnBookMessage = "return";
 
@@ -33,7 +33,7 @@ public class UserInputMessage {
         return bookDetailMessage;
     }
 
-    public String getMainMenuMessage() {
+    public String getMenuMessage() {
         return mainMenuMessage;
     }
 }
