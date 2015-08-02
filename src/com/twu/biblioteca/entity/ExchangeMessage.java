@@ -10,8 +10,15 @@ public class ExchangeMessage {
     private String outputMessage;
     private List<Book> bookList;
     private List<Movie> movieList;
+    private boolean loginStatus;
+    private String userNumber;
 
     public ExchangeMessage() {
+    }
+
+    public ExchangeMessage(String outputMessage, boolean loginStatus) {
+        this.outputMessage = outputMessage;
+        this.loginStatus = loginStatus;
     }
 
     public ExchangeMessage(String outputMessage) {
@@ -46,5 +53,21 @@ public class ExchangeMessage {
 
     public void setMovieList(List<Movie> movieList) {
         this.movieList = movieList;
+    }
+
+    public boolean isLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(boolean loginStatus) {
+        this.loginStatus = loginStatus;
+    }
+
+    public String getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
     }
 }

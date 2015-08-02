@@ -3,6 +3,7 @@ package com.twu.biblioteca.entity;
 public class UserInputMessage {
     private String enterSystemMessage = "hi";
     private String loginMessage = "login";
+    private String userInfoMessage = "info";
     private String quitMessage = "quit";
     private String bookListMessage = "book list";
     private String bookDetailMessage = "book details";
@@ -20,6 +21,14 @@ public class UserInputMessage {
 
     public String getMainMenuMessage() {
         return mainMenuMessage;
+    }
+
+    public String getLoginMessage() {
+        return loginMessage;
+    }
+
+    public String getUserInfoMessage() {
+        return userInfoMessage;
     }
 
     public String getMovieListMessage() {

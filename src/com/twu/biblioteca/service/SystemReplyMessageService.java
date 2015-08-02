@@ -12,6 +12,7 @@ public class SystemReplyMessageService {
     private BookService bookService = new BookService();
     private ExchangeMessage outputExchangeMessage = new ExchangeMessage();
     private MovieService movieService = new MovieService();
+    private UserService userService = new UserService();
 
     public String waitForInputMessage(Scanner scanner) {
         String message = scanner.nextLine();
@@ -29,13 +30,30 @@ public class SystemReplyMessageService {
         System.out.println(message);
     }
 
-    public void loginService() {
-        System.out.println();
+    public ExchangeMessage loginService(String inputMessage,List<UserAccount> userAccountList) {
+        if (inputMessage.contains(userInputMessage.getLoginMessage())) {
+            outputExchangeMessage.setOutputMessage(systemReplyMessage.getLoginAccountMessage());
+        }
+        else {
+            String userNumber = userService.checkLoginStatus(inputMessage, userAccountList);
+            if (userNumber!=null) {
+                outputExchangeMessage.setUserNumber(userNumber);
+                outputExchangeMessage.setLoginStatus(true);
+                outputExchangeMessage.setOutputMessage(systemReplyMessage.getWelcomeMessage());
+            }
+            else {
+                outputExchangeMessage.setOutputMessage(systemReplyMessage.getLoginMessage());
+            }
+        }
+        return outputExchangeMessage;
     }
 
-    public ExchangeMessage identifyMessage(String inputMessage,List<Book> bookList,List<Movie> movieList) {
+    public ExchangeMessage identifyMessage(String inputMessage,List<Book> bookList,List<Movie> movieList, String userNumber) {
         if (inputMessage.contains(userInputMessage.getEnterSystemMessage())) {
             outputExchangeMessage = showWelcomeMessage();
+        }
+        else if (inputMessage.contains(userInputMessage.getUserInfoMessage())) {
+            outputExchangeMessage = showUserInfoMessage(userNumber);
         }
         else if (inputMessage.contains(userInputMessage.getMenuMessage())) {
             outputExchangeMessage = showMenuOptions();
@@ -85,6 +103,11 @@ public class SystemReplyMessageService {
             return exchangeMessage;
 //        }
 //        return null;
+    }
+
+    public ExchangeMessage showUserInfoMessage(String userNumber){
+        ExchangeMessage exchangeMessage = new ExchangeMessage(userService.showUserInfo(userNumber));
+        return exchangeMessage;
     }
 
     public ExchangeMessage showQuitMessage() {

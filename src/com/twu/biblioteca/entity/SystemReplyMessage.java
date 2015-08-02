@@ -4,6 +4,7 @@ public class SystemReplyMessage {
 
     private String welcomeMessage = "Welcome to the Bangalore public library management system!";
     private String loginMessage = "Please use your library number and password to login!";
+    private String loginAccountMessage = "Please input your library number and password separated with space to login.";
     private String invalidMenuMessage = "Select a valid option!";
     private String quitMessage = "Quit the system successful!";
     private String menuOptions = "List books.\nList Movies.";
@@ -20,6 +21,14 @@ public class SystemReplyMessage {
 
     public String getWelcomeMessage() {
         return welcomeMessage;
+    }
+
+    public String getLoginMessage() {
+        return loginMessage;
+    }
+
+    public String getLoginAccountMessage() {
+        return loginAccountMessage;
     }
 
     public String getInvalidMenuMessage() {
