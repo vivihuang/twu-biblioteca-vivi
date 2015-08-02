@@ -8,7 +8,8 @@ import java.util.List;
 public class ExchangeMessage {
 
     private String outputMessage;
-    private List<BookDetails> bookDetailsList;
+    private List<Book> bookList;
+    private List<Movie> movieList;
 
     public ExchangeMessage() {
     }
@@ -17,9 +18,9 @@ public class ExchangeMessage {
         this.outputMessage = outputMessage;
     }
 
-    public ExchangeMessage(String outputMessage, List<BookDetails> bookDetailsList) {
+    public ExchangeMessage(String outputMessage, List<Book> bookList) {
         this.outputMessage = outputMessage;
-        this.bookDetailsList = bookDetailsList;
+        this.bookList = bookList;
     }
 
     public String getOutputMessage() {
@@ -30,11 +31,20 @@ public class ExchangeMessage {
         this.outputMessage = outputMessage;
     }
 
-    public void setBookDetailsList(List<BookDetails> bookDetailsList) {
-        this.bookDetailsList = bookDetailsList;
+    public void setBookList(List<Book> bookList) {
+        this.bookList = bookList;
     }
 
-    public List<BookDetails> getBookDetailsList() {
-        return bookDetailsList;
+    public List<Book> getBookList() {
+        return bookList;
+    }
+
+
+    public List<Movie> getMovieList() {
+        return movieList;
+    }
+
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList = movieList;
     }
 }

@@ -3,14 +3,20 @@ package com.twu.biblioteca.entity;
 public class SystemReplyMessage {
 
     private String welcomeMessage = "Welcome to the Bangalore public library management system!";
+    private String loginMessage = "Please use your library number and password to login!";
     private String invalidMenuMessage = "Select a valid option!";
     private String quitMessage = "Quit the system successful!";
-    private String menuOptions = "List books.";
+    private String menuOptions = "List books.\nList Movies.";
     private String bookListMessage = "The book list:\n";
-    private String successfulCheckoutMessage = "Thank you! Enjoy the book!";
-    private String invalidCheckoutMessage = "That book is not available.";
-    private String successfulReturnMessage = "Thank you for returning the book.";
-    private String invalidReturnMessage = "That is not a valid book to return.";
+    private String successfulCheckoutBookMessage = "Thank you! Enjoy the book!";
+    private String invalidCheckoutBookMessage = "That book is not available.";
+    private String successfulReturnBookMessage = "Thank you for returning the book.";
+    private String invalidReturnBookMessage = "That is not a valid book to return.";
+    private String movieListMessage = "The movie list:\n";
+    private String successfulCheckoutMovieMessage = "Thank you! Enjoy the movie!";
+    private String invalidCheckoutMovieMessage = "That movie is not available.";
+    private String successfulReturnMovieMessage = "Thank you for returning the movie.";
+    private String invalidReturnMovieMessage = "That is not a valid movie to return.";
 
     public String getWelcomeMessage() {
         return welcomeMessage;
@@ -28,24 +34,44 @@ public class SystemReplyMessage {
         return menuOptions;
     }
 
-    public String getSuccessfulCheckoutMessage() {
-        return successfulCheckoutMessage;
+    public String getSuccessfulCheckoutBookMessage() {
+        return successfulCheckoutBookMessage;
     }
 
-    public String getInvalidCheckoutMessage() {
-        return invalidCheckoutMessage;
+    public String getInvalidCheckoutBookMessage() {
+        return invalidCheckoutBookMessage;
     }
 
-    public String getSuccessfulReturnMessage() {
-        return successfulReturnMessage;
+    public String getSuccessfulReturnBookMessage() {
+        return successfulReturnBookMessage;
     }
 
-    public String getInvalidReturnMessage() {
-        return invalidReturnMessage;
+    public String getInvalidReturnBookMessage() {
+        return invalidReturnBookMessage;
     }
 
 
     public String getBookListMessage() {
         return bookListMessage;
+    }
+
+    public String getMovieListMessage() {
+        return movieListMessage;
+    }
+
+    public String getSuccessfulCheckoutMovieMessage() {
+        return successfulCheckoutMovieMessage;
+    }
+
+    public String getInvalidCheckoutMovieMessage() {
+        return invalidCheckoutMovieMessage;
+    }
+
+    public String getSuccessfulReturnMovieMessage() {
+        return successfulReturnMovieMessage;
+    }
+
+    public String getInvalidReturnMovieMessage() {
+        return invalidReturnMovieMessage;
     }
 }

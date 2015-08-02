@@ -1,20 +1,20 @@
 package com.twu.biblioteca.entity;
 
-public class BookDetails {
+public class Book {
 
     private int id;
     private String name;
     private String author;
     private int yearPublished;
 
-    public BookDetails() {
+    public Book() {
     }
 
     public int getId() {
         return id;
     }
 
-    public BookDetails(int id, String name, String author, int yearPublished) {
+    public Book(int id, String name, String author, int yearPublished) {
         this.id = id;
         this.name = name;
         this.author = author;

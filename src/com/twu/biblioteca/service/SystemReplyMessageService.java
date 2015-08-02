@@ -9,8 +9,9 @@ public class SystemReplyMessageService {
 
     private SystemReplyMessage systemReplyMessage = new SystemReplyMessage();
     private UserInputMessage userInputMessage = new UserInputMessage();
-    private BookDetailsService bookDetailsService = new BookDetailsService();
+    private BookService bookService = new BookService();
     private ExchangeMessage outputExchangeMessage = new ExchangeMessage();
+    private MovieService movieService = new MovieService();
 
     public String waitForInputMessage(Scanner scanner) {
         String message = scanner.nextLine();
@@ -28,8 +29,11 @@ public class SystemReplyMessageService {
         System.out.println(message);
     }
 
-    public ExchangeMessage identifyMessage(String inputMessage,List<BookDetails> bookDetailsList) {
+    public void loginService() {
+        System.out.println();
+    }
 
+    public ExchangeMessage identifyMessage(String inputMessage,List<Book> bookList,List<Movie> movieList) {
         if (inputMessage.contains(userInputMessage.getEnterSystemMessage())) {
             outputExchangeMessage = showWelcomeMessage();
         }
@@ -37,16 +41,28 @@ public class SystemReplyMessageService {
             outputExchangeMessage = showMenuOptions();
         }
         else if (inputMessage.contains(userInputMessage.getBookListMessage())) {
-            outputExchangeMessage = showBookList(bookDetailsList);
+            outputExchangeMessage = showBookList(bookList);
         }
         else if (inputMessage.contains(userInputMessage.getBookDetailMessage())) {
-            outputExchangeMessage = showBookDetails(bookDetailsList);
+            outputExchangeMessage = showBookDetails(bookList);
         }
         else if (inputMessage.contains(userInputMessage.getCheckoutBookMessage())) {
-            outputExchangeMessage = checkoutBook(inputMessage,bookDetailsList);
+            outputExchangeMessage = checkoutBook(inputMessage, bookList);
         }
         else if (inputMessage.contains(userInputMessage.getReturnBookMessage())) {
-            outputExchangeMessage = returnBook(inputMessage, bookDetailsList);
+            outputExchangeMessage = returnBook(inputMessage, bookList);
+        }
+        else if (inputMessage.contains(userInputMessage.getMovieListMessage())) {
+            outputExchangeMessage = showMovieList(movieList);
+        }
+        else if (inputMessage.contains(userInputMessage.getMovieDetailMessage())) {
+            outputExchangeMessage = showMovieDetails(movieList);
+        }
+        else if (inputMessage.contains(userInputMessage.getCheckoutMovieMessage())) {
+            outputExchangeMessage = checkoutMovie(inputMessage,movieList);
+        }
+        else if (inputMessage.contains(userInputMessage.getReturnMovieMessage())) {
+            outputExchangeMessage = returnMovie(inputMessage,movieList);
         }
         else if (inputMessage.contains(userInputMessage.getQuitMessage())) {
             outputExchangeMessage = showQuitMessage();
@@ -87,54 +103,91 @@ public class SystemReplyMessageService {
 //        return null;
     }
 
-    public ExchangeMessage showBookList(List<BookDetails> bookDetailsList) {
+    public ExchangeMessage showBookList(List<Book> bookList) {
 //        if (inputMessage.equals(userInputMessage.getBookListMessage())) {
-            String outputMessage = systemReplyMessage.getBookListMessage() + bookDetailsService.getBookList(bookDetailsList);
+            String outputMessage = systemReplyMessage.getBookListMessage() + bookService.getBookList(bookList);
             ExchangeMessage exchangeMessage = new ExchangeMessage(outputMessage);
             return exchangeMessage;
 //        }
 //        return null;
     }
 
-    public ExchangeMessage showBookDetails(List<BookDetails> bookDetailsList) {
+    public ExchangeMessage showBookDetails(List<Book> bookList) {
 //        String orderMessage = userInputMessage.getBookDetailMessage();
 //        if (inputMessage.contains(orderMessage)) {
-            ExchangeMessage exchangeMessage = new ExchangeMessage(bookDetailsService.getBookDetails(bookDetailsList));
+            ExchangeMessage exchangeMessage = new ExchangeMessage(bookService.getBookDetails(bookList));
             return exchangeMessage;
 //        }
 //        return null;
     }
 
-    public ExchangeMessage checkoutBook(String inputMessage, List<BookDetails> bookDetailsList) {
+    public ExchangeMessage checkoutBook(String inputMessage, List<Book> bookList) {
         String orderMessage = userInputMessage.getCheckoutBookMessage();
         ExchangeMessage exchangeMessage = new ExchangeMessage();
 //        if (inputMessage.contains(orderMessage)) {
-            bookDetailsList = bookDetailsService.checkoutBook(inputMessage, orderMessage, bookDetailsList);
-            if (bookDetailsList != null) {
-                exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulCheckoutMessage());
-                exchangeMessage.setBookDetailsList(bookDetailsList);
+            bookList = bookService.checkoutBook(inputMessage, orderMessage, bookList);
+            if (bookList != null) {
+                exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulCheckoutBookMessage());
+                exchangeMessage.setBookList(bookList);
             } else {
-                exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidCheckoutMessage());
+                exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidCheckoutBookMessage());
             }
             return exchangeMessage;
 //        }
 //        return null;
     }
 
-    public ExchangeMessage returnBook(String inputMessage, List<BookDetails> bookDetailsList) {
+    public ExchangeMessage returnBook(String inputMessage, List<Book> bookList) {
         ExchangeMessage exchangeMessage = new ExchangeMessage();
         String orderMessage = userInputMessage.getReturnBookMessage();
 //        if (inputMessage.contains(orderMessage)) {
-            bookDetailsList = bookDetailsService.returnBook(inputMessage, orderMessage, bookDetailsList);
-            if (bookDetailsList != null) {
-                exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulReturnMessage());
-                exchangeMessage.setBookDetailsList(bookDetailsList);
+            bookList = bookService.returnBook(inputMessage, orderMessage, bookList);
+            if (bookList != null) {
+                exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulReturnBookMessage());
+                exchangeMessage.setBookList(bookList);
             } else {
-                exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidReturnMessage());
+                exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidReturnBookMessage());
             }
             return exchangeMessage;
 //        }
 //        return null;
+    }
+
+    public ExchangeMessage showMovieList(List<Movie> movieList) {
+        String outputMessage = systemReplyMessage.getMovieListMessage() + movieService.getMovieList(movieList);
+        ExchangeMessage exchangeMessage = new ExchangeMessage(outputMessage);
+        return exchangeMessage;
+    }
+
+    public ExchangeMessage showMovieDetails(List<Movie> movieList) {
+        ExchangeMessage exchangeMessage = new ExchangeMessage(movieService.getMovieDetails(movieList));
+        return exchangeMessage;
+    }
+
+    public ExchangeMessage checkoutMovie(String inputMessage,List<Movie> movieList) {
+        ExchangeMessage exchangeMessage = new ExchangeMessage();
+        String orderMessage = userInputMessage.getCheckoutMovieMessage();
+        movieList = movieService.checkoutMovie(inputMessage,orderMessage,movieList);
+        if (movieList != null) {
+            exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulCheckoutMovieMessage());
+            exchangeMessage.setMovieList(movieList);
+        } else {
+            exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidCheckoutMovieMessage());
+        }
+        return exchangeMessage;
+    }
+
+    public ExchangeMessage returnMovie(String inputMessage, List<Movie> movieList) {
+        ExchangeMessage exchangeMessage = new ExchangeMessage();
+        String orderMessage = userInputMessage.getReturnMovieMessage();
+        movieList = movieService.returnMovie(inputMessage, orderMessage, movieList);
+        if (movieList != null) {
+            exchangeMessage.setOutputMessage(systemReplyMessage.getSuccessfulReturnMovieMessage());
+            exchangeMessage.setMovieList(movieList);
+        } else {
+            exchangeMessage.setOutputMessage(systemReplyMessage.getInvalidReturnMovieMessage());
+        }
+        return exchangeMessage;
     }
 
 }

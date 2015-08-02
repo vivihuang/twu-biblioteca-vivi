@@ -2,12 +2,37 @@ package com.twu.biblioteca.entity;
 
 public class UserInputMessage {
     private String enterSystemMessage = "hi";
+    private String loginMessage = "login";
     private String quitMessage = "quit";
-    private String bookListMessage = "list";
-    private String bookDetailMessage = "details";
+    private String bookListMessage = "book list";
+    private String bookDetailMessage = "book details";
     private String mainMenuMessage = "menu";
-    private String checkoutBookMessage = "checkout";
-    private String returnBookMessage = "return";
+    private String checkoutBookMessage = "checkout book";
+    private String movieListMessage = "movie list";
+    private String movieDetailMessage = "movie details";
+    private String checkoutMovieMessage = "checkout movie";
+    private String returnBookMessage = "return book";
+    private String returnMovieMessage = "return movie";
+
+    public String getReturnMovieMessage() {
+        return returnMovieMessage;
+    }
+
+    public String getMainMenuMessage() {
+        return mainMenuMessage;
+    }
+
+    public String getMovieListMessage() {
+        return movieListMessage;
+    }
+
+    public String getMovieDetailMessage() {
+        return movieDetailMessage;
+    }
+
+    public String getCheckoutMovieMessage() {
+        return checkoutMovieMessage;
+    }
 
     public String getCheckoutBookMessage() {
         return checkoutBookMessage;
